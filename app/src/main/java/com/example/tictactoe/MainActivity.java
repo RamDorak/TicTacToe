@@ -2,12 +2,17 @@ package com.example.tictactoe;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
+
+    MediaPlayer mediaPlayer;
+
     boolean gameActive = true;
     // Player representation
     // 0 - X
@@ -53,9 +58,13 @@ public class MainActivity extends AppCompatActivity {
                 gameActive = false;
                 if(gameState[winPosition[0]] == 0){
                     winnerStr = "X has won";
+                    MediaPlayer mp= MediaPlayer.create(this, R.raw.x_wins);
+                    mp.start();
                 }
                 else{
                     winnerStr = "O has won";
+                    MediaPlayer mp= MediaPlayer.create(this, R.raw.o_wins);
+                    mp.start();
                 }
                 // Update the status bar for winner announcement
                 TextView status = findViewById(R.id.status);
@@ -99,12 +108,28 @@ public class MainActivity extends AppCompatActivity {
         TextView status = findViewById(R.id.status);
         status.setText("X's Turn - Tap to play");
 
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+
+        // Restart the MediaPlayer
+        mediaPlayer = MediaPlayer.create(this, R.raw.background_music);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Add background music
+        MediaPlayer mediaPlayer= MediaPlayer.create(this, R.raw.background_music);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
     }
 }
 
